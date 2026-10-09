@@ -149,7 +149,8 @@ if run_sample:
         test_ids = split.get("test", [])
         if not test_ids:
             raise ValueError(f"No held-out test patients listed in {SPLIT_MANIFEST}")
-        sample_id = test_ids[0]
+        demo_id = "BRATS_064.nii.gz"
+        sample_id = demo_id if demo_id in test_ids else test_ids[0]
         sample_case = next(
             (
                 case for case in load_cases(DATASET_ROOT)
