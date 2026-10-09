@@ -29,9 +29,10 @@ SPLIT_MANIFEST = CHECKPOINT.parent / "split.json"
 INFERENCE_DEVICE = torch.device("cuda:0")
 
 st.set_page_config(page_title="MONAI Brain Tumour Profiler", layout="wide")
-st.title("3D Brain Tumour Segmentation — MONAI")
-st.warning(
-    "Educational research software only. Masks and measurements are not a "
+st.title("🧠 3D Brain Tumour Segmentation")
+st.subheader("MONAI Deep Learning Inference Profiler", divider=True)
+st.info(
+    "**Educational research software only.** Masks and measurements are not a "
     "radiologist's report and must not be used for diagnosis or treatment."
 )
 
@@ -281,11 +282,13 @@ if "reference_labels" in result:
         f"reference {reference_profile['total_volume_cm3']:.2f} cm³",
     )
 
+st.subheader("📊 Tumor Profile", divider="gray")
 summary = st.columns(4)
 summary[0].metric("Whole tumor volume", f"{profile['total_volume_cm3']:.2f} cm³")
 summary[1].metric("Tumor voxels", f"{profile['total_voxel_count']:,}")
 summary[2].metric("Peak area", f"{profile['max_cross_section_cm2']:.2f} cm²")
 summary[3].metric("Axial slice span", str(profile["lesion_depth_span_slices"]))
+st.divider()
 
 slice_index = st.slider("Axial slice", 0, labels.shape[2] - 1, labels.shape[2] // 2)
 base = flair[:, :, slice_index]
@@ -314,20 +317,22 @@ if "reference_labels" in result:
 rotated_flair = np.rot90((base * 255).astype(np.uint8))
 rotated_prediction = np.rot90(gray)
 rotated_reference = np.rot90(reference_overlay) if reference_overlay is not None else None
-view_controls = st.columns(3 if rotated_reference is not None else 2)
-zoom = view_controls[0].slider(
-    "Image zoom", min_value=1.0, max_value=4.0, value=1.0, step=0.25,
-    help="Zoom into the same location in the MRI and mask panels.",
-)
-height, width = rotated_flair.shape[:2]
-center_x = view_controls[1].slider(
-    "Pan X", min_value=0, max_value=width - 1, value=width // 2,
-    disabled=zoom == 1.0,
-)
-center_y = view_controls[2].slider(
-    "Pan Y", min_value=0, max_value=height - 1, value=height // 2,
-    disabled=zoom == 1.0,
-)
+
+with st.expander("🔍 Advanced View Controls"):
+    view_controls = st.columns(3)
+    zoom = view_controls[0].slider(
+        "Image zoom", min_value=1.0, max_value=4.0, value=1.0, step=0.25,
+        help="Zoom into the same location in the MRI and mask panels.",
+    )
+    height, width = rotated_flair.shape[:2]
+    center_x = view_controls[1].slider(
+        "Pan X", min_value=0, max_value=width - 1, value=width // 2,
+        disabled=zoom == 1.0,
+    )
+    center_y = view_controls[2].slider(
+        "Pan Y", min_value=0, max_value=height - 1, value=height // 2,
+        disabled=zoom == 1.0,
+    )
 
 def zoom_view(image):
     crop_width = max(1, round(width / zoom))
