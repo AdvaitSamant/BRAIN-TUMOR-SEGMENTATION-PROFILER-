@@ -6,3 +6,5 @@ nibabel>=5.1.0
 opencv-python-headless>=4.8.0
 torch>=2.0.0
 scikit-image>=0.21.0
+monai>=1.4.0,<2.0
+pandas>=2.0.0

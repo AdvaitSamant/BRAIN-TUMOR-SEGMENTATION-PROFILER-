@@ -153,6 +153,7 @@ activemq-data/
 .env
 .envrc
 .venv
+.venv-monai/
 env/
 venv/
 ENV/
@@ -218,3 +219,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Medical imaging datasets, trained weights, and run outputs
+/data/
+/runs/
+/models/
