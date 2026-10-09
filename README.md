@@ -87,13 +87,12 @@ any project report.
 
 ## Inference app
 
-After training, run the MONAI app:
+After training, run the primary MONAI app:
 
 ```powershell
 streamlit run app.py
 ```
 
-Choose **MONAI 3D** from Streamlit's page navigation.
 Use **Run held-out sample case** to run a labeled example from the test split
 created during training. This requires the extracted dataset at
 `data/Task01_BrainTumour/`; the sample includes its reference mask and metrics.
@@ -118,6 +117,11 @@ The MONAI Streamlit page requires CUDA and explicitly runs inference on
 silently switching to CPU when CUDA is unavailable. The slice viewer fills the
 available panel width and provides zoom and X/Y pan controls shared by the
 MRI, prediction, and reference overlays.
+
+The former heuristic/2-D Streamlit app is no longer the primary interface. It
+is preserved as an optional baseline for project comparison and can be run
+separately with `streamlit run app_legacy.py`; its predictions are not produced
+by the trained MONAI model and should not be presented as equivalent.
 
 ## Evaluation and limitations
 
